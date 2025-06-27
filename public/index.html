@@ -1,1 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MegaMining Reward</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    button { padding: 10px 20px; font-size: 18px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Join @MegaMiningCrypto to Get Reward</h2>
+  <button onclick="joinChannel()">Join Channel</button>
+  <button onclick="checkMembership()">Check Membership</button>
+  <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
 
+  <script>
+    const tg = window.Telegram.WebApp;
+    const userId = tg.initDataUnsafe?.user?.id;
+
+    function joinChannel() {
+      window.open("https://t.me/MegaMiningCrypto", "_blank");
+    }
+
+    async function checkMembership() {
+      const res = await fetch(`/api/check-membership?user_id=${userId}`);
+      const data = await res.json();
+
+      if (data.ok && ["member", "administrator", "creator"].includes(data.status)) {
+        document.getElementById("result").innerText = "✅ You are a member! Reward granted.";
+      } else {
+        document.getElementById("result").innerText = "❌ You're not a member yet.";
+      }
+    }
+  </script>
+</body>
+</html>
